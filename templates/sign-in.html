@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel = "icon" href = "/static/logo.jpg" type = "image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastsave-signup</title>
+    <style>
+
+        html{
+            height: 100%;
+            
+        }
+        body{
+           
+            background: rgb(20, 20, 20);
+            height:100%;
+            background-position: center;
+            
+            background-size: cover;
+            color:white;
+
+        }
+        #main{
+            width:80%;
+            
+            margin-top:10%;
+            
+        }
+        #photo{
+            width:100%;
+            height:26rem;
+            margin: 5px;
+            border:2px solid white;
+            border-radius: 1rem;
+            text-align: center;
+        }
+        #logo{
+            width:3rem;
+        }
+        h1{
+            
+            padding-left: 1rem;
+            float:left;
+            font-size: 190%;
+        }
+        h4{
+            float: left;
+            color:#878787;
+            font-size: 100%;
+            margin-top:-1rem;
+            padding-left: 1rem;
+        }
+        form{
+            text-align: left;
+        }
+        input{
+            width:100%;
+            margin-top:2%;
+            height:2rem;
+            background-color:#ebebeb;
+            padding-left: 2%;
+            border:1px solid white;
+        }
+        button{
+            width:70%;
+            height:2rem;
+            border-radius: 0.5rem;
+            border:none;
+            margin-top: 1.5%;
+            
+            
+        }
+        #bottoni{
+            
+            margin-top: 3%;
+        }
+        #log{
+            width:20%;
+            margin-left: 2%;
+            transition:0.4s;
+        }
+        #log:hover{
+            box-shadow: 0px 0px 60px 0px black;
+            cursor: pointer;
+        }
+
+        #error{
+            color:#ff9191;
+            font-size: 2rem;
+        }
+        #mains{
+            width:90%;
+            margin-bottom: 4%;
+            margin-top: -5%;
+        }
+        
+        @media only screen and (max-width: 420px) {
+            input{
+                width:100%;
+                margin-top:1%;
+                height:2rem;
+            }
+            
+            #photo video{
+        
+                max-width: 60%;
+                max-height: 60%;
+
+            
+            }
+            
+        }
+          
+         
+    </style>
+</head>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js'></script>
+<script>
+
+    function load_webcam(){
+        document.getElementById('body').style.backgroundSize = "cover";
+        document.getElementById('snapquest').innerHTML = "";
+        var can = document.getElementById('snap');
+        can.style.display = "block";
+        document.getElementById('reset').style.display = "block";
+
+        Webcam.set({
+            width:480,
+            height:360,
+            image_format:'jpeg',
+            jpeg_quality:90
+        });
+
+        Webcam.attach('#photo');
+    }
+    function take_snap(){
+        document.getElementById('snapquest').innerHTML = "Snap Taken successfully!!";
+        Webcam.snap(function(data_uri){
+         document.getElementById('photo').innerHTML = '<img id="wa" src="'+data_uri+'">';
+
+        });
+        
+
+        var image = document.getElementById('wa').src;
+        console.log(image);
+        document.getElementById('file').value=image;
+
+        
+    }
+   
+
+</script>
+<body id="body">
+
+    <table>
+        <tr>
+            <th><img id='logo' src='/static/logo.jpg'></th>
+            <th id='h1'>
+                <h1>FastSave</h1><br>
+                <h4>Save your files in a secure and fast way</h4>
+            </th>
+        </tr>
+    </table>
+    <a href="{{url_for('login')}}"><button id="log">login</button></a>
+    <center><div id="mains">
+        <div id='main'><form action='{{url_for("main_page")}}' enctype="multipart/form-data" method="post" onsubmit="return nomi()">
+        <input type='text' id='user' placeholder="choose username" name='user'  required autofocus><br> 
+        <input type='text' id='name' placeholder="name & surname" name='name'  required><br>
+        
+        <p id='paserror' style="display: none;">f</p>
+        <input type="email" id='mail' placeholder="example@gmail.com" name='email' required><br>
+        <input type="file" id='fila' placeholder="profile pic" name="filo" style='background-color:transparent;padding-top:1%;' required><br>
+        <input type="text" id='file' placeholder="profile pic" name="file" style='display:none' required><br>
+        <div id='photo' onclick="load_webcam()">
+            <p style='margin-top:20%; font-size:120%'>click here to load the camera</p>
+        </div>
+        <p id='snapquest' style='color:green'></p>
+        
+
+        <input type="submit" id='sub' style='border-radius:0.5rem;'>
+        
+    </form>
+    <div id='bottoni'>
+    <button id='snap' onclick="take_snap()" style="display: none;background-color:#a8a8a8;">take image</button>
+    <button id='reset' onclick="load_webcam()" style="display: none; background:linear-gradient(45deg,#a8a8a8,white)">reset</button>
+    </div>
+    
+    <div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p id='error'>{{message[1]}}</p>
+            {% endfor%}
+        {% endif %}
+    {% endwith %}
+    </div></div></div>
+    </center>
+</div>
+</body>
+</html>

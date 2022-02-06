@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel = "icon" href = "/static/logo.jpg" type = "image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login fastSave</title>
+    <style>
+        html{
+            height: 100%;
+            
+        }
+        body{
+            background: linear-gradient(0deg,#000000,#161616,#1a1919);
+            background-repeat: no-repeat;
+            color:white;
+
+        }
+        #cam{
+            margin-top: 3%;
+            width:100%;
+            height:26rem;
+            border:2px solid white;
+            border-radius: 1rem;
+            text-align: center;
+            
+        }
+        #main{
+            width:80%;
+            
+            margin-top:10%;
+            
+        }
+        button{
+            display: none;
+        }
+        #logo{
+            width:3rem;
+        }
+        h1{
+            
+            padding-left: 1rem;
+            float:left;
+            font-size: 190%;
+        }
+        h4{
+            float: left;
+            color:#878787;
+            font-size: 100%;
+            margin-top:-1rem;
+            padding-left: 1rem;
+        }
+        form{
+            text-align: left;
+        }
+        input{
+            width:100%;
+            margin-top:2%;
+            height:2rem;
+            background-color:#ebebeb;
+            padding-left: 2%;
+            border:1px solid white;
+            border-radius: 0.5rem;
+        }
+        button{
+            width:70%;
+            height:2rem;
+            border-radius: 0.5rem;
+            border:none;
+            margin-top: 1.5%;
+            
+            
+        }
+        #bottoni{
+            margin-top: 3%;
+        }
+        #log{
+            width:20%;
+            display: block;
+            margin-left: 2%;
+            transition:0.4s;
+        }
+        #log:hover{
+            box-shadow: 0px 0px 60px 0px black;
+            cursor: pointer;
+        }
+        
+        #error{
+            color:#ff9191;
+            font-size: 2rem;
+        }
+        @media only screen and (max-width: 420px) {
+            input{
+                width:100%;
+                margin-top:1%;
+                height:2rem;
+            }
+
+            
+        }
+    </style>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js'></script>
+    <script>
+        function load_cam(){
+        
+        var can = document.getElementById('take');
+        can.style.display = "block";
+        document.getElementById('reset').style.display = "block";
+
+        Webcam.set({
+            width:480,
+            height:360,
+            image_format:'jpeg',
+            jpeg_quality:90
+        });
+
+        Webcam.attach("#cam");
+
+        }
+
+        function snapping(){
+            document.getElementById('info').textContent=  "Snap Taken successfully!!";
+
+            Webcam.snap(function(data_uri){
+                document.getElementById('cam').innerHTML = '<img id="wa" src="'+data_uri+'">';
+       
+               });
+
+            var image = document.getElementById('wa').src;
+            document.getElementById('link').value = image;
+        }
+
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <th><img id='logo' src='/static/logo.jpg'></th>
+            <th id='h1'>
+                <h1>FastSave</h1><br>
+                <h4>Save your files in a secure and fast way</h4>
+            </th>
+        </tr>
+    </table>
+    <a href="{{url_for('sign_in')}}"><button id="log">sign up</button></a>
+    <center><div id='main'><form action="{{url_for('login')}}" method='post'>
+        <input type="text" placeholder="username" name='user' required>
+        <input type="text" name='link' id='link' style='display:none;' required>
+        <div id='cam' onclick="load_cam()">
+            <p style='margin-top:20%; font-size:120%'>click here to load the camera</p>
+        </div>
+        <p id='info' style='color:green;'></p>
+        <input type="submit">
+    </form>
+    <div id='bottoni'>
+        <button id='take' onclick="snapping()" style="display: none;background-color:#a8a8a8;">take photo</button>
+        <button id='reset' onclick="load_cam()" style="display: none; background:linear-gradient(45deg,#a8a8a8,white)">reset</button>
+    </div>
+    
+    
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <p id='error'>{{ msg[1] }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div></center>
+</body>
+</html>
